@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('Tweet', {
-  name: String
+   text: String,
+   lat: {type:Number},
+   lng: {type:Number}
 });

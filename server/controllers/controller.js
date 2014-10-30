@@ -12,3 +12,11 @@ module.exports.list = function (req, res) {
     res.json(results);
   });
 }
+module.exports.addTweet = function (req, res) {
+	var tweet = new Tweet();
+	tweet.text = req.text;
+	tweet.lat = req.coordinates.coordinates[0];
+	tweet.lng = req.coordinates.coordinates[1];
+	//console.log(tweet.text)
+	tweet.save();
+}
