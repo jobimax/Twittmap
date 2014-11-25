@@ -16,11 +16,18 @@ var twit = new twitter({
     access_token_key: credentials.access_token_key,
     access_token_secret: credentials.access_token_secret
 });
+var config = {
+    "USER"    : "",
+    "PASS"    : "",
+    "HOST"    : "ec2-54-174-18-51.compute-1.amazonaws.com",
+    "PORT"    : "27017",
+    "DATABASE" : "Twittmap"     };
+var dbPath  = "mongodb://"+config.USER + ":"+     config.PASS + "@"+     config.HOST + ":"+    config.PORT + "/"+     config.DATABASE;
 stream = null;
-server.listen(process.env.PORT||8081)
+server.listen(process.env.PORT || 8081)
 
-mongoose.connect('mongodb://localhost:27017/Twittmap');
-
+//mongoose.connect('mongodb://localhost:27017/Twittmap');
+mongoose.connect('mongodb://ec2-54-84-115-75.compute-1.amazonaws.com:27017/Twittmap')
 app.use(bodyParser());
 
 app.get('/', function (req, res) {
@@ -60,7 +67,7 @@ io.sockets.on('connection',function(socket){
 //               //If so then build up some nice json and send out to web sockets
 //               var outputPoint = {"lat": data.coordinates.coordinates[0],"lng": data.coordinates.coordinates[1]};
 //               //console.log(data.coordinates.coordinates[0]);
-//               //console.log(data.text);
+//               console.log(data.text);
 //               serverController.addTweet(data);
 //               //socket.broadcast.emit("twitter-stream", outputPoint);
 

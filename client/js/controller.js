@@ -10,6 +10,7 @@ app.controller('serverController',['$scope','$resource', function ($scope, $reso
   	
   	var heatmap;
  	var liveTweets = new google.maps.MVCArray();
+ 	//var pointArray = new google.maps.MVCArray(liveTweets);
 	heatmap = new google.maps.visualization.HeatmapLayer({
     	data: liveTweets,
     	radius: 25
@@ -54,11 +55,14 @@ app.controller('serverController',['$scope','$resource', function ($scope, $reso
 	    	// This listens on the "twitter-steam" channel and data is 
 	    	// received everytime a new tweet is receieved.
 	  		socket.on('twitter-stream', function (data) {
-	  			if(data.text.search($scope.filter)>=0){console.log("true");}
+	  			//if(data.text.search($scope.filter)>=0){console.log("true");}
+	  			//console.log("hello")
+	  			//console.log(data.text)
 	  			var tweetLocation = new google.maps.LatLng(data.lng,data.lat);
 	  			//console.log(data.text.search(filter));
 	  			if(data.text.search($scope.filter)>=0){
 	  				liveTweets.push(tweetLocation);
+	  				console.log(data.text)
 	  			}
 	  			//$scope.$digest();
 	  			// var marker = new google.maps.Marker({
