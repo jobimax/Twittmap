@@ -58,12 +58,40 @@ app.controller('serverController',['$scope','$resource', function ($scope, $reso
 	  			//if(data.text.search($scope.filter)>=0){console.log("true");}
 	  			//console.log("hello")
 	  			//console.log(data.text)
-	  			var tweetLocation = new google.maps.LatLng(data.lng,data.lat);
-	  			//console.log(data.text.search(filter));
-	  			if(data.text.search($scope.filter)>=0){
-	  				liveTweets.push(tweetLocation);
-	  				console.log(data.text)
-	  			}
+	  			if (data.coordinates){
+		            if (data.coordinates !== null){
+		              //If so then build up some nice json and send out to web sockets
+		              var outputPoint = {"lat": data.coordinates.coordinates[0],"lng": data.coordinates.coordinates[1]};
+		            }
+		            else if(data.place){
+		              if(data.place.bounding_box === 'Polygon'){
+		                // Calculate the center of the bounding box for the tweet
+		                var coord, _i, _len;
+		                var centerLat = 0;
+		                var centerLng = 0;
+
+		                for (_i = 0, _len = coords.length; _i < _len; _i++) {
+		                  coord = coords[_i];
+		                  centerLat += coord[0];
+		                  centerLng += coord[1];
+		                }
+		                centerLat = centerLat / coords.length;
+		                centerLng = centerLng / coords.length;
+
+		                var outputPoint = {"lat": centerLat,"lng": centerLng};
+		              }
+		        	}
+		      	}
+		  			var tweetLocation = new google.maps.LatLng(outputPoint.lng,outputPoint.lat);
+		  			//console.log(data.text.search(filter));
+		  			if(data.text.search($scope.filter)>=0){
+		  					console.log($scope.sentiment);
+		  				if(data.Sentiment == $scope.sentiment || $scope.sentiment == 'all'){
+							liveTweets.push(tweetLocation);
+							console.log(data.text)
+		  				}
+		  				// console.log(data.text)
+		  			}
 	  			//$scope.$digest();
 	  			// var marker = new google.maps.Marker({
 	  			// 	position: tweetLocation,
